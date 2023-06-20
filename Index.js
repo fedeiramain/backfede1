@@ -6,23 +6,29 @@ class ProductManager {
     }
 
     addProduct({ title, description, price, img, code, stock = 10 }) {
-        const pruebaCode = this.products.find(e => e.code === code);
-        if (pruebaCode) {
-            console.log("Producto Repedito")
-        } else {
-            const id = this.products.length + 1
-            this.products.push(
-                {
-                    id,
-                    title,
-                    description,
-                    price,
-                    img,
-                    code,
-                    stock
-                }
-            )
-        }
+        return new Promise((res, rej) => {
+            setTimeout(()=> {
+                const pruebaCode = this.products.find(e => e.code === code);
+            if (!pruebaCode) {
+                const id = this.products.length + 1;
+                res(
+                    this.products.push(
+                        {
+                            id,
+                            title,
+                            description,
+                            price,
+                            img,
+                            code,
+                            stock
+                        }
+                    )
+                )
+            } else {
+                rej("no existe")
+            }
+            },500)
+        })
     }
 
     getProduct() {
