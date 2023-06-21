@@ -6,30 +6,25 @@ class ProductManager {
     }
 
     addProduct({ title, description, price, img, code, stock = 10 }) {
-        return new Promise((res, rej) => {
-            setTimeout(()=> {
-                const pruebaCode = this.products.find(e => e.code === code);
-            if (!pruebaCode) {
-                const id = this.products.length + 1;
-                res(
-                    this.products.push(
-                        {
-                            id,
-                            title,
-                            description,
-                            price,
-                            img,
-                            code,
-                            stock
-                        }
-                    )
-                )
-            } else {
-                rej("no existe")
-            }
-            },500)
-        })
-    }
+
+        const pruebaCode = this.products.find(e => e.code === code);
+        if (!pruebaCode) {
+            const id = this.products.length + 1;
+            this.products.push(
+                {
+                    id,
+                    title,
+                    description,
+                    price,
+                    img,
+                    code,
+                    stock
+                }
+            )
+        } else {
+            console.log("Este Producto ya se encuentra agregado")
+        }
+    };
 
     getProduct() {
         return this.products;
@@ -47,9 +42,6 @@ p.addProduct({
     code: "primero",
     stock: 5
 })
-
-
-console.log(p.getProduct());
 
 p.addProduct({
     title: "producto prueba 2",
@@ -69,25 +61,18 @@ p.addProduct({
     stock: 5
 })
 
-console.log(p.getProduct());
-
 const ordenes = p.getProduct();
 
 console.log(ordenes);
 
 
 const getProductById = () => {
-    return new Promise((resolve, reject) => {
-       setTimeout(() => {
-        const exist = ordenes.find(e => e.id === 3);
-        if(exist) {
-            resolve(true)
-        } else {
-            reject("no existe")
-        }
-       }, 1000
-       )
-    })
-}
+    const exist = ordenes.find(e => e.id === 3);
+    if (exist) {
+        console.log("Producto en carrito")
+    } else {
+        console.log("getProductById Not Found")
+    }
+};
 
-console.log(getProductById());
+getProductById();
