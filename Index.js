@@ -6,25 +6,29 @@ class ProductManager {
     }
 
     addProduct({ title, description, price, img, code, stock = 10 }) {
+           
+            if(title && description && price && img && code && stock) {
+                const pruebaCode = this.products.find(e => e.code === code);
 
-        const pruebaCode = this.products.find(e => e.code === code);
-        if (!pruebaCode) {
-            const id = this.products.length + 1;
-            this.products.push(
-                {
-                    id,
-                    title,
-                    description,
-                    price,
-                    img,
-                    code,
-                    stock
+                if (!pruebaCode) {
+
+                    const id = new Date().getTime();
+                    this.products.push(
+                        {
+                            id,
+                            title,
+                            description,
+                            price,
+                            img,
+                            code,
+                            stock
+                        }
+                    )
+                } else {
+                    console.log("Este Producto ya se encuentra agregado")
                 }
-            )
-        } else {
-            console.log("Este Producto ya se encuentra agregado")
+            }
         }
-    };
 
     getProduct() {
         return this.products;
@@ -61,13 +65,21 @@ p.addProduct({
     stock: 5
 })
 
+p.addProduct({
+    title: "producto prueba 4",
+    price: 100,
+    img: "sin imagen",
+    code: "segu",
+    stock: 5
+})
+
 const ordenes = p.getProduct();
 
 console.log(ordenes);
 
 
-const getProductById = () => {
-    const exist = ordenes.find(e => e.id === 3);
+const getProductById = (id) => {
+    const exist = ordenes.find(e => e.id === id);
     if (exist) {
         console.log("Producto en carrito")
     } else {
@@ -76,3 +88,7 @@ const getProductById = () => {
 };
 
 getProductById();
+
+
+
+  
