@@ -1,34 +1,38 @@
-const products = document.querySelector("products");
+const fs = require("fs")
+const path = require("path")
+const filename = "productos.txt"
+const filepath = path.join(__dirname, filename)
+
 
 class ProductManager {
     constructor() {
         this.products = [];
     }
 
-    addProduct({ title, description, price, img, code, stock = 10 }) {
-           
-            if(title && description && price && img && code && stock) {
-                const pruebaCode = this.products.find(e => e.code === code);
+     addProduct({ title, description, price, img, code, stock = 10 }) {
 
-                if (!pruebaCode) {
+        if (title && description && price && img && code && stock) {
+            const pruebaCode = this.products.find(e => e.code === code);
 
-                    const id = new Date().getTime();
-                    this.products.push(
-                        {
-                            id,
-                            title,
-                            description,
-                            price,
-                            img,
-                            code,
-                            stock
-                        }
-                    )
-                } else {
-                    console.log("Este Producto ya se encuentra agregado")
-                }
+            if (!pruebaCode) {
+
+                const id = new Date().getTime();
+                this.products.push(
+                    {
+                        id,
+                        title,
+                        description,
+                        price,
+                        img,
+                        code,
+                        stock
+                    }
+                )
+            } else {
+                console.log("Este Producto ya se encuentra agregado")
             }
         }
+    }
 
     getProduct() {
         return this.products;
@@ -52,7 +56,7 @@ p.addProduct({
     description: "Este es un producto Prueba",
     price: 100,
     img: "sin imagen",
-    code: "primero",
+    code: "segundo",
     stock: 5
 })
 
@@ -77,6 +81,7 @@ const ordenes = p.getProduct();
 
 console.log(ordenes);
 
+fs.writeFileSync(filepath, ordenes, null, 2)
 
 const getProductById = (id) => {
     const exist = ordenes.find(e => e.id === id);
