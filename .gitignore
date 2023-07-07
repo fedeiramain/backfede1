@@ -1,0 +1,10 @@
+node_modules
+/practica
+/practica2
+.about.html
+.Index.css
+.Index.html
+.Index.js
+.loader.js
+.package-lock.json
+.package.json

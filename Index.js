@@ -95,5 +95,3 @@ const getProductById = (id) => {
 getProductById();
 
 
-
-  

@@ -16,14 +16,12 @@ class ProductManager {
             id: numero,
             ...producto
         })
-        console.log(productos[1])
         await fs.writeFile(this.filepath, JSON.stringify(productos, null, 2))
     }
 
     async getProducts(){
         const data = await fs.readFile(this.filepath, 'utf-8')
         const productos = JSON.parse(data)
-        
         return productos
     }
 
@@ -37,9 +35,9 @@ class ProductManager {
     async deleteProduct(id){
         const data = await fs.readFile(this.filepath, 'utf-8')      
         const productos = JSON.parse(data)
-        productos.filter(p => p.id != id);
+        const filterProd = productos.filter(p => p.id != id);
 
-        await fs.writeFile(this.filepath, JSON.stringify(productos,null,2))
+        await fs.writeFile(this.filepath, JSON.stringify(filterProd,null,2))
     }
 
     async updateProduct(id, updated) {
