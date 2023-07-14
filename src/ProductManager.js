@@ -3,15 +3,6 @@ const path = require('path')
 
 class ProductManager {
 
-    #prodcuts = []
-    #readFile = async ()=> {
-        const data = await fs.readFile(this.filepath, "utf-8")
-        this.#prodcuts = JSON.parse(data)
-    }
-    #writeFile = async ()=> {
-        const data = JSON.stringify(this.#prodcuts, null,2)
-        await fs.writeFile(this.filepath, data)
-    }
     constructor(filename) {
         this.filename = filename
         this.filepath = path.join(__dirname, this.filename)
@@ -23,6 +14,16 @@ class ProductManager {
         const productos = JSON.parse(data)
 
         return productos
+    }
+
+    #prodcuts = []
+    #readFile = async ()=> {
+        const data = await fs.readFile(this.filepath, "utf-8")
+        this.#prodcuts = JSON.parse(data)
+    }
+    #writeFile = async ()=> {
+        const data = JSON.stringify(this.#prodcuts, null,2)
+        await fs.writeFile(this.filepath, data)
     }
 
     async getAll() {
