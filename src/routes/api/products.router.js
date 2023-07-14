@@ -1,8 +1,11 @@
 const { Router } = require('express')
 const ProductManager = require('../../ProductManager')
+const CartManager = require('../../CartManager')
 
 
 const productManager = new ProductManager('products.json')
+const cartManager = new CartManager('cart.json')
+
 const router = Router()
 
 router.get("/", async (req, res)=> {
@@ -45,6 +48,14 @@ router.post("/", async (req, res) => {
     const { body } = req
 
     const product = await productManager.create(body)
+
+    res.status(201).send(product)
+})
+
+router.post("/", async (req, res) => {
+    const { body } = req
+
+    const product = await cartManager.create(body)
 
     res.status(201).send(product)
 })
