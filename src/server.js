@@ -4,13 +4,15 @@ const ProductManager = require("./ProductManager")
 const app = express()
 const productManager = new ProductManager("products.json")
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 app.get("/",  (req,res)=> {
 
     res.send("productos")
 })
 
-app.get("/productos", async (req, res)=> {
+app.get("/api/productos", async (req, res)=> {
     const {search, min, max, limit} = req.query
     const datos = await productManager.getProducts()
     const productos = datos
@@ -33,7 +35,7 @@ app.get("/productos", async (req, res)=> {
     res.send(filtrados)
 })
 
-app.get("/productos/:id", async (req,res)=> {
+app.get("/api/productos/:id", async (req,res)=> {
     const datos = await productManager.getProducts()
     const id = req.params.id 
     let productos = datos
@@ -46,7 +48,42 @@ app.get("/productos/:id", async (req,res)=> {
     
 })
 
+app.post("/api/productos", async (req, res) => {
+    const { body } = req
 
-app.listen(3000, () => {
+    const product = await productManager.create(body)
+
+    res.status(201).send(product)
+})
+
+app.put("/api/productos/:id", async (req, res) => {
+    const { body } = req
+    const { id } = req.params
+
+    if (!await productManager.getById(id)) {
+        res.sendStatus(404)
+        return
+    }
+
+    const product = await productManager.save(id, body)
+
+    res.sendStatus(202).send(product)
+})
+
+app.delete("/api/productos/:id", async (req, res) => {
+    const { id } = req.params
+    if (!await productManager.getById(id)) {
+        res.sendStatus(404)
+        return
+    }
+
+    const deleted = await productManager.delete(id)
+
+    req.sendStatus(202).send(deleted)
+
+})
+
+
+app.listen(8080, () => {
     console.log("ok")
 })
