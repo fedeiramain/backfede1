@@ -9,82 +9,80 @@ class CartManager {
         
     }
 
-    async getProducts() {
+    async getCarts() {
         const data = await fs.readFile(this.filepath, "utf-8")
-        const productos = JSON.parse(data)
+        const cart = JSON.parse(data)
 
-        return productos
+        return cart
     }
 
-    #prodcuts = []
+    #cart = []
+
     #readFile = async ()=> {
         const data = await fs.readFile(this.filepath, "utf-8")
-        this.#prodcuts = JSON.parse(data)
+        this.#cart = JSON.parse(data)
     }
     #writeFile = async ()=> {
-        const data = JSON.stringify(this.#prodcuts, null,2)
+        const data = JSON.stringify(this.#cart, null,2)
         await fs.writeFile(this.filepath, data)
     }
 
     async getAll() {
         await this.#readFile()
-        return this.#prodcuts
+        return this.#cart
     }
 
-    async create(product) {
-        await this.readFile()
+    async create({products}) {
+        await this.#readFile()
+        const id = new Date().getTime()
+        const newCart = {}
+        newCart.id = id
+        newCart.products = products || []
 
-        const id = (this.#prodcuts[this.#prodcuts.length]?.id || 1)
-        const newProduct = {
-            id,
-            ...product
-        }
 
-        this.#prodcuts.push(newProduct)
+        this.#cart.push(newCart)
 
         await this.#writeFile()
 
-        return newProduct
+        return newCart
     }
 
     async getById(id) {
         await this.#readFile()
 
-        return this.#prodcuts.find(p => p.id == id)
+        return this.#cart.find(c => c.id == id)
     }
 
-    async save(id, product) {
-        await this.#readFile()
-        const exist = await this.getById(id)
+    inCart(idCart) {
+        if(this.getById(idCart)) {
+            return true
+        } else {
+            throw Error("id not found")
+        }
+    }
 
-        if(!exist) {
-            return
+    async addProduct(idCart, idProduct) {
+        const existCart = await this.getById(idCart);
+        const index = this.#cart.indexOf(existCart)
+        
+        let pAdd = { id: idProduct, cantidad: 1 }
+        let productos = existCart.products;
+        // productos.push(pAdd)
+        if(productos.some(p => p.id === idProduct)) {
+            const index = productos.findIndex(p => p.id === idProduct)
+            productos[index].cantidad++
+        } else {
+            productos.push(pAdd)
         }
 
-        const {
-            title,
-            description,
-            price,
-            img,
-            stock,
-            code
-        } = product
-
-        exist.title = title
-        exist.description = description
-        exist.price = price
-        exist.img = img
-        exist.stock = stock
-        exist.code = code
-
-        await this.#writeFile
-    }
-
-    delete(id) {
-        this.#readFile()
-        this.#prodcuts = this.#prodcuts.filter(p => p.id != id)
-        this.#writeFile()
-    }
+        const newCart = {}
+        newCart.id = idCart
+        newCart.products = productos
+        
+        this.#cart.splice(index, 1, newCart)
+        await this.#writeFile()
+        
+       }
 }
 
 module.exports = CartManager

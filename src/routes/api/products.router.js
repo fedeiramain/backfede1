@@ -11,9 +11,8 @@ const router = Router()
 router.get("/", async (req, res)=> {
     const {search, min, max, limit} = req.query
     const datos = await productManager.getAll()
-    const productos = datos
 
-    let filtrados = productos
+    let filtrados = datos
 
 
     if(search) {
@@ -36,12 +35,15 @@ router.get("/:id", async (req,res)=> {
     const id = req.params.id 
     let productos = datos
 
+    if(isNaN(id)){
+        res.send({status: "(id) debe ser Number"})
+    }
     if(productos = productos.filter(p => p.id == id)) {
         res.send(productos)
     } else {
-        res.send("no existe")
+        res.send({status: "(id) no existe el producto"})
     }
-    
+    return
 })
 
 router.post("/", async (req, res) => {
@@ -49,7 +51,7 @@ router.post("/", async (req, res) => {
 
     const product = await productManager.create(body)
 
-    res.status(201).send(product)
+    res.send({status: "cargado con exito", product: product })
 })
 
 router.post("/", async (req, res) => {
@@ -62,16 +64,17 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
     const { body } = req
-    const { id } = req.params
+    const { id } = req.params.id
 
     if (!await productManager.getById(id)) {
         res.sendStatus(404)
         return
+    } else {
+        const product = await productManager.save(id, body)
+
+        res.sendStatus(202).send(product)
     }
 
-    const product = await productManager.save(id, body)
-
-    res.sendStatus(202).send(product)
 })
 
 router.delete("/:id", async (req, res) => {
@@ -79,11 +82,11 @@ router.delete("/:id", async (req, res) => {
     if (!await productManager.getById(id)) {
         res.sendStatus(404)
         return
+    } else {
+        const deleted = await productManager.delete(id)
+
+        req.sendStatus(202).send(deleted)
     }
-
-    const deleted = await productManager.delete(id)
-
-    req.sendStatus(202).send(deleted)
 
 })
 

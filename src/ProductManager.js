@@ -1,3 +1,4 @@
+const { error } = require('console')
 const fs = require('fs/promises')
 const path = require('path')
 
@@ -32,9 +33,9 @@ class ProductManager {
     }
 
     async create(product) {
-        await this.readFile()
+        await this.#readFile()
 
-        const id = (this.#prodcuts[this.#prodcuts.length]?.id || 1)
+        const id = new Date().getTime()
         const newProduct = {
             id,
             ...product
@@ -53,37 +54,51 @@ class ProductManager {
         return this.#prodcuts.find(p => p.id == id)
     }
 
+    inProductos(idProduct) {
+        if(this.getById(idProduct)) {
+            return this.#prodcuts.filter(p => p.id == idProduct)
+        } else {
+            throw Error("id not found")
+        }
+    }
+
     async save(id, product) {
         await this.#readFile()
         const exist = await this.getById(id)
 
         if(!exist) {
-            return
+            return new error("el id no existe")
+        } else {
+            const {
+                title,
+                description,
+                price,
+                img,
+                stock,
+                code,
+                status,
+                thumbnails
+            } = product
+    
+            exist.title = title
+            exist.description = description
+            exist.price = price
+            exist.img = img
+            exist.stock = stock
+            exist.code = code
+            exist.status = status
+            exist.thumbnails = thumbnails
+    
+            await this.#writeFile()
         }
 
-        const {
-            title,
-            description,
-            price,
-            img,
-            stock,
-            code
-        } = product
-
-        exist.title = title
-        exist.description = description
-        exist.price = price
-        exist.img = img
-        exist.stock = stock
-        exist.code = code
-
-        await this.#writeFile
+       
     }
 
-    delete(id) {
-        this.#readFile()
+    async delete(id) {
+       await this.#readFile()
         this.#prodcuts = this.#prodcuts.filter(p => p.id != id)
-        this.#writeFile()
+       await this.#writeFile()
     }
 }
 
