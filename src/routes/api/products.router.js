@@ -54,14 +54,6 @@ router.post("/", async (req, res) => {
     res.send({status: "cargado con exito", product: product })
 })
 
-router.post("/", async (req, res) => {
-    const { body } = req
-
-    const product = await cartManager.create(body)
-
-    res.status(201).send(product)
-})
-
 router.put("/:id", async (req, res) => {
     const { body } = req
     const { id } = req.params.id
