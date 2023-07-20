@@ -6,7 +6,7 @@ class ProductManager {
 
     constructor(filename) {
         this.filename = filename
-        this.filepath = path.join(__dirname, this.filename)
+        this.filepath = path.join(__dirname,'./data', this.filename)
         
     }
 
