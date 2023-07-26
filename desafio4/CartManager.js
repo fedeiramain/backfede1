@@ -29,7 +29,7 @@ class CartManager {
         await this.#readFile()
 
         const elCart = this.#cart.find(p => p.id == id)
-        return elCart
+        return elCart.products
     }
 
     async addProduct(idCart, idProduct) {
