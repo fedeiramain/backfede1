@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
     const { body } = req
-    const { id } = req.params.id
+    const id = req.params.id
 
     if (!await productManager.getById(id)) {
         res.sendStatus(404)

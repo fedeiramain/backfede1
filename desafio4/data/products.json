@@ -64,5 +64,11 @@
     "title": "coca",
     "price": "100",
     "description": "bebida"
+  },
+  {
+    "id": 1690331509799,
+    "title": "Nuevo Producto",
+    "price": "200000",
+    "description": "Espero funcione"
   }
 ]
