@@ -28,17 +28,15 @@ class CartManager {
     async getById(id) {
         await this.#readFile()
 
-        return this.#cart.find(p => p.id == id)
+        const elCart = this.#cart.find(p => p.id == id)
+        return elCart
     }
 
     async addProduct(idCart, idProduct) {
         await this.#readFile()
 
-        const cart = this.#cart[idCart] || { products: [] }
-
+        const cart = this.#cart[idCart]
         cart.products.push(idProduct)
-
-        this.#cart[idCart] = cart
 
         await this.#writeFile()
 

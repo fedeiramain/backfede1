@@ -10,8 +10,12 @@ function addCart(idProduct) {
     socket.emit('addToCart', { idCart: 1 , idProduct })
 
 
-    socket.on('inCart', (products) => {
-        productAdd.innerHTML = products.length
+    socket.on('inCart', (cart) => {
+        productAdd.innerHTML = cart.length
+        
     })
+    
 }
 addCart();
+
+

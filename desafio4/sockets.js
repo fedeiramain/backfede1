@@ -17,9 +17,8 @@ function sockets(socket) {
 
         socket.on('addToCart', async ({ idCart, idProduct }) => {
             await cartManager.addProduct(idCart, idProduct)
-            const products = await cartManager.getById(idCart)
-        
-            socket.emit('inCart', products)
+            const cart = await cartManager.getById(idCart)
+            socket.emit('inCart', cart)
           })
 }
 
